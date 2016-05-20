@@ -351,11 +351,11 @@ public class BibtexEntryTests {
     public void testCiteKeyAndID() {
         BibEntry be = new BibEntry();
         Assert.assertFalse(be.hasCiteKey());
-        be.setField("author", "Albert Einstein");
+        be.setField("author", "Albert Einstein1");
         be.setCiteKey("Einstein1931");
         Assert.assertTrue(be.hasCiteKey());
         Assert.assertEquals("Einstein1931", be.getCiteKey());
-        Assert.assertEquals("Albert Einstein", be.getField("author"));
+        Assert.assertEquals("Albert Einstein1", be.getField("author"));
         be.clearField("author");
         Assert.assertNull(be.getField("author"));
 
@@ -363,4 +363,23 @@ public class BibtexEntryTests {
         be.setId(id);
         Assert.assertEquals(id, be.getId());
     }
+
+    @Test
+    public void testCiteKeyAndTitle() {
+        BibEntry be = new BibEntry();
+        Assert.assertFalse(be.hasCiteKey());
+        be.setField("title", "Teste");
+        be.setCiteKey("Einstein1931");
+        Assert.assertTrue(be.hasCiteKey());
+        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("Teste", be.getField("title"));
+        be.clearField("title");
+        Assert.assertNull(be.getField("title"));
+
+        String id = IdGenerator.next();
+        be.setId(id);
+        Assert.assertEquals(id, be.getId());
+    }
+
 }
+
