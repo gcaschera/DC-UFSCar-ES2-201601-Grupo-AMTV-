@@ -84,6 +84,30 @@ public class BibtexEntryTests {
         Assert.fail();
     }
 
+    @Test(expected = NullPointerException.class)
+    public void isNullAuthorThrowsNPE() {
+        BibEntry e = new BibEntry("author", BibtexEntryTypes.ARTICLE.getName());
+
+        e.setField("author", null);
+        Assert.fail();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void isNullTitleThrowsNPE() {
+        BibEntry e = new BibEntry("title", BibtexEntryTypes.ARTICLE.getName());
+
+        e.setField("title", null);
+        Assert.fail();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void isNullJournlaThrowsNPE() {
+        BibEntry e = new BibEntry("journal", BibtexEntryTypes.ARTICLE.getName());
+
+        e.setField("journal", null);
+        Assert.fail();
+    }
+
     @Test
     public void isEmptyCiteKey() {
         BibEntry e = new BibEntry("id", BibtexEntryTypes.ARTICLE.getName());
@@ -94,6 +118,21 @@ public class BibtexEntryTests {
 
         e.setCiteKey("key");
         Assert.assertTrue(e.hasCiteKey());
+
+        e.clearField(BibEntry.KEY_FIELD);
+        Assert.assertFalse(e.hasCiteKey());
+    }
+
+    @Test
+    public void isNotEmptyCiteKey() {
+        BibEntry e = new BibEntry("id", BibtexEntryTypes.ARTICLE.getName());
+        Assert.assertFalse(e.hasCiteKey());
+
+        e.setCiteKey("1");
+        Assert.assertTrue(e.hasCiteKey());
+
+        e.setCiteKey("");
+        Assert.assertFalse(e.hasCiteKey());
 
         e.clearField(BibEntry.KEY_FIELD);
         Assert.assertFalse(e.hasCiteKey());
@@ -344,7 +383,6 @@ public class BibtexEntryTests {
         Assert.assertTrue(be.isSearchHit());
         be.setSearchHit(false);
         Assert.assertFalse(be.isSearchHit());
-
     }
 
     @Test
@@ -375,6 +413,92 @@ public class BibtexEntryTests {
         Assert.assertEquals("Teste", be.getField("title"));
         be.clearField("title");
         Assert.assertNull(be.getField("title"));
+
+        String id = IdGenerator.next();
+        be.setId(id);
+        Assert.assertEquals(id, be.getId());
+    }
+
+    @Test
+    public void testCiteKeyAndJournal() {
+        BibEntry be = new BibEntry();
+        Assert.assertFalse(be.hasCiteKey());
+        be.setField("journal", "Teste Novo");
+        be.setCiteKey("Einstein1931");
+        Assert.assertTrue(be.hasCiteKey());
+        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("Teste Novo", be.getField("journal"));
+        be.clearField("journal");
+        Assert.assertNull(be.getField("journal"));
+
+        String id = IdGenerator.next();
+        be.setId(id);
+        Assert.assertEquals(id, be.getId());
+    }
+
+    @Test
+    public void testCiteKeyAndYear() {
+        BibEntry be = new BibEntry();
+        Assert.assertFalse(be.hasCiteKey());
+        be.setField("year", "1950");
+        be.setCiteKey("Einstein1931");
+        Assert.assertTrue(be.hasCiteKey());
+        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("1950", be.getField("year"));
+        be.clearField("year");
+        Assert.assertNull(be.getField("year"));
+
+        String id = IdGenerator.next();
+        be.setId(id);
+        Assert.assertEquals(id, be.getId());
+    }
+
+    @Test
+    public void testAllFilled() {
+        BibEntry be = new BibEntry();
+        Assert.assertFalse(be.hasCiteKey());
+        be.setField("author", "Albert Einstein1");
+        be.setField("title", "Teste");
+        be.setField("journal", "Teste Novo");
+        be.setField("year", "1950");
+        be.setCiteKey("Einstein1931");
+        Assert.assertTrue(be.hasCiteKey());
+        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("1950", be.getField("year"));
+        Assert.assertEquals("Albert Einstein1", be.getField("author"));
+        Assert.assertEquals("Teste Novo", be.getField("journal"));
+        be.clearField("year");
+        Assert.assertNull(be.getField("year"));
+        be.clearField("author");
+        Assert.assertNull(be.getField("author"));
+        be.clearField("journal");
+        Assert.assertNull(be.getField("journal"));
+
+        String id = IdGenerator.next();
+        be.setId(id);
+        Assert.assertEquals(id, be.getId());
+    }
+
+    @Test
+    public void testEmptyFilled() {
+        BibEntry be = new BibEntry();
+        Assert.assertFalse(be.hasCiteKey());
+        be.setField("author", " ");
+        be.setField("title", " ");
+        be.setField("journal", " ");
+        be.setField("year", " ");
+        be.setCiteKey(" ");
+        Assert.assertTrue(be.hasCiteKey());
+        Assert.assertEquals(" ", be.getCiteKey());
+        Assert.assertEquals(" ", be.getField("year"));
+        Assert.assertEquals(" ", be.getField("author"));
+        Assert.assertEquals(" ", be.getField("journal"));
+        be.clearField("year");
+        Assert.assertNull(be.getField("year"));
+        be.clearField("author");
+        Assert.assertNull(be.getField("author"));
+        be.clearField("journal");
+        Assert.assertNull(be.getField("journal"));
 
         String id = IdGenerator.next();
         be.setId(id);
