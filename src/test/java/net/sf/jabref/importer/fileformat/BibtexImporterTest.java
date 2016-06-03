@@ -94,6 +94,25 @@ public class BibtexImporterTest {
     }
 
     @Test
+    public void testImportEmptyDatabase() throws IOException {
+        try (InputStream stream = BibtexImporterTest.class.getResourceAsStream("BibtexImporter.emptyDatabase.bib")) {
+            List<BibEntry> bibEntries = importer.importEntries(stream, new OutputPrinterToNull());
+
+            assertEquals(0, bibEntries.size());
+        }
+    }
+
+    @Test
+    public void testImportFilledDatabase() throws IOException {
+        try (InputStream stream = BibtexImporterTest.class.getResourceAsStream("BibtexImporter.examples2.bib")) {
+            List<BibEntry> bibEntries = importer.importEntries(stream, new OutputPrinterToNull());
+
+            assertEquals(2, bibEntries.size());
+        }
+    }
+
+
+    @Test
     public void testGetFormatName() {
         assertEquals("BibTeX", importer.getFormatName());
     }
