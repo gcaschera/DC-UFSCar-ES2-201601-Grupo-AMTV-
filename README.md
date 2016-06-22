@@ -1,6 +1,7 @@
 ##Trabalho Prático - Engenharia de Software 2
 **Professor:** Fabiano Ferrari
 
+
 **Grupo:**
 > - Arthur Regatieri Munhoz
 > - Murilo Guedes Toloni
@@ -9,7 +10,7 @@
 > - Vinicius Barbosa
 
 
-###Tarefas Realizadas:
+##Tarefas Realizadas:
 
   > **Testes:**
   
@@ -19,7 +20,7 @@
     - Importação de itens bibliográficos na base corrente
       **Arquivo:** src/test/java/net/sf/jabref/importer/fileformat/BibtexImporterTest.java
   
-  Manutenções:
+  > **Manutenções:**
   
     - Em inserção de itens bibliográficos, validar os seguintes campos de acordo com as seguintes regras:
       - Year: deve ser um ano válido (de acordo com o calendário da linguagem Java)
