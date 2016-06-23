@@ -279,8 +279,8 @@ public class BibEntry {
     }
 
     /**
-     *  Função criada para gerar uma String aleateatória de tamanho 5.
-     *  Utilizada para auxiliar na criaÃ§Ã£o de uma bibtexkey automÃ¡tica.
+     *  Geracao de String aleateatória de tamanho 5.
+     *  Utilizada para criacao de bibtexkey automatica.
     */
     protected String AutoString() {
         String POSS_CHARS =
@@ -377,7 +377,7 @@ public class BibEntry {
             }
         }
 
-        //Validacao do campo opcional "number" (Manutenacao Extra)
+        //Validacao do campo "number"
         if (name.equals("number")) {
             char[] number = value.toCharArray();
 
@@ -390,7 +390,7 @@ public class BibEntry {
         }
 
 
-        //Valicao do campo opicional "edition" (Manutencao Extra)
+        //Valicao do campo  "edition"
         if (name.equals("edition")) {
             char[] edition = value.toCharArray();
             int aux = 0;
@@ -570,7 +570,7 @@ public class BibEntry {
     /**
      * @param maxCharacters The maximum number of characters (additional
      *                      characters are replaced with "..."). Set to 0 to disable truncation.
-     * @return A short textual deion of the entry in the format:
+     * @return A short textual description of the entry in the format:
      * Author1, Author2: Title (Year)
      */
     public String getAuthorTitleYear(int maxCharacters) {
