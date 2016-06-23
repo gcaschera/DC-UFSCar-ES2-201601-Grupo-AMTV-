@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+
+// VAMO USAR ESSA CLASSE AQUI PRA FAZER ESSAS VERIFICAÇÃO DE REFERENCIA DUPLIACADA !
+
 /**
  * Determines which bibtex cite keys are duplicates in a single {@link BibDatabase}
  */
