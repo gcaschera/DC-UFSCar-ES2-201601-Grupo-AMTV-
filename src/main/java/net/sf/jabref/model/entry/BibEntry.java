@@ -19,7 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -279,52 +278,26 @@ public class BibEntry {
     }
 
     /**
-     *  Geracao de String aleateatória de tamanho 5.
-     *  Utilizada para criacao de bibtexkey automatica.
-    */
-    protected String AutoString() {
-        String POSS_CHARS =
-
-                "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
-        StringBuilder s = new StringBuilder();
-        Random rnd = new Random();
-        while (s.length() < 5) {
-            int index = (int) (rnd.nextFloat() * POSS_CHARS.length());
-            s.append(POSS_CHARS.charAt(index));
-        }
-        String Str = s.toString();
-        return Str;
-    }
-
-    /**
      * Returns the bibtex key, or null if it is not set.
      */
     public String getCiteKey() {
         return fields.get(KEY_FIELD);
     }
 
-    /**
-     * Validacao de bibtexkey
-     * - O primeiro caractere deve, obrigatoriamente, ser uma letra e o campo
-     * - deve ter pelo menos dois caracteres. Caso contrario, sera usada
-     * - uma chave automatica.
-     * - Definida pelo usuario ou automaticamente pelo sistema.
-    */
     public void setCiteKey(String newCiteKey) {
-        String auto;
-        String prefix = "bib";
 
-        char[] aux = newCiteKey.toCharArray();
-
-        auto = prefix.concat(AutoString());
-
-        if ((newCiteKey.length() < 2) || (Character.isDigit(aux[0]))) {
-            setField(KEY_FIELD, auto);
-        } else {
-            setField(KEY_FIELD, newCiteKey);
+        //Manutencao: Validacao do campo Bibtexkey
+        //Verifica se o tamanho de "Bibtexkey" eh < 2, se for, limpa o campo
+        if (newCiteKey.length() < 2) {
+            newCiteKey = newCiteKey.concat("bibkey");
         }
-    }
 
+        //Transformando o primeiro caracter do campo "Bibtexkey" para lowercase
+        String auxFinal = Character.toLowerCase(newCiteKey.charAt(0)) + newCiteKey.substring(1);
+        newCiteKey = auxFinal;
+
+        setField(KEY_FIELD, newCiteKey);
+    }
 
     public boolean hasCiteKey() {
         return !Strings.isNullOrEmpty(getCiteKey());
@@ -350,7 +323,19 @@ public class BibEntry {
         Objects.requireNonNull(name, "field name must not be null");
         Objects.requireNonNull(value, "field value must not be null");
 
-        //Validacao do campo "year"
+        if (value.isEmpty()) {
+            clearField(name);
+            return;
+        }
+
+        String fieldName = toLowerCase(name);
+
+        if (BibEntry.ID_FIELD.equals(fieldName)) {
+            throw new IllegalArgumentException("The field name '" + name + "' is reserved");
+        }
+
+        //Manutencao: Validacao do campo ano ("year")
+        //Campo "year" nao pode conter caracteres diferentes de digitos e deve estar num intervalo valido > 1899 e <= ano atual
         Calendar calendar = GregorianCalendar.getInstance();
 
         int min = 1900;
@@ -367,8 +352,7 @@ public class BibEntry {
 
                 if (!Character.isDigit(digitos[0]) && !Character.isDigit(digitos
 
-[1]) && !Character.isDigit(digitos[2])
-                        && !Character.isDigit(digitos[3])) {
+                [1]) && !Character.isDigit(digitos[2]) && !Character.isDigit(digitos[3])) {
                     clearField("year");
                     return;
                 } else {
@@ -378,6 +362,22 @@ public class BibEntry {
                     }
                 }
             }
+        }
+
+        changed = true;
+
+        String oldValue = fields.get(fieldName);
+        try {
+            // We set the field before throwing the changeEvent, to enable
+            // the change listener to access the new value if the change
+            // sets off a change in database sorting etc.
+            fields.put(fieldName, value);
+            firePropertyChangedEvent(fieldName, oldValue, value);
+        } catch (PropertyVetoException pve) {
+            // Since we have already made the change, we must undo it since
+            // the change was rejected:
+            fields.put(fieldName, oldValue);
+            throw new IllegalArgumentException("Change rejected: " + pve);
         }
     }
 
