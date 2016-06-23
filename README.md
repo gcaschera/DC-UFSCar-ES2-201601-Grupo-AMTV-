@@ -32,3 +32,11 @@
       
     - Em importação de itens bibliográficos, oferecer a opção de criação de um novo arquivo (database) quando existirem entradas duplicadas no arquivo corrente (current database) e o arquivo que está sendo importado (considerar formatos BibTeX e CSV).
       Arquivo: 
+      
+  > **Testes das manutenções:**
+  
+    - Manutenção Validação Campo BibtexKey
+      Arquivo: src/test/java/net/sf/jabref/model/entry/ManutencaoBibtexkeyTestes.java
+    
+    - Manutenção Validação Campo Year
+      Arquivo: src/test/java/net/sf/jabref/model/entry/ManutencaoYearTestes.java
