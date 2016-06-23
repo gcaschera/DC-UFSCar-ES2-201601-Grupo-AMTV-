@@ -25,7 +25,7 @@
     - Em inserção de itens bibliográficos, validar os seguintes campos de acordo com as seguintes regras:
       - Year: deve ser um ano válido (de acordo com o calendário da linguagem Java)
       - Bibtexkey: definido pelo usuário ou automaticamente, deve ter no mínimo 2 caracteres, sendo o primeiro uma letra maiúscula ou minúscula
-      Arquivo:
+      Arquivo: src/main/java/net/sf/jabref/model/entry/BibEntry.java
       
     - Em importação de itens bibliográficos, oferecer a opção de importar arquivo em formato CSV
       Arquivo: src/main/java/net/sf/jabref/importer/fileformat/CSVimporter.java
