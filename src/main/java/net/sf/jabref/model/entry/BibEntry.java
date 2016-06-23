@@ -1,18 +1,3 @@
-/*  Copyright (C) 2003-2015 JabRef contributors.
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
 package net.sf.jabref.model.entry;
 
 import java.beans.PropertyChangeEvent;
@@ -27,12 +12,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -292,15 +279,50 @@ public class BibEntry {
     }
 
     /**
+     *  Geracao de String aleateatória de tamanho 5.
+     *  Utilizada para criacao de bibtexkey automatica.
+    */
+    protected String AutoString() {
+        String POSS_CHARS =
+
+                "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
+        StringBuilder s = new StringBuilder();
+        Random rnd = new Random();
+        while (s.length() < 5) {
+            int index = (int) (rnd.nextFloat() * POSS_CHARS.length());
+            s.append(POSS_CHARS.charAt(index));
+        }
+        String Str = s.toString();
+        return Str;
+    }
+
+    /**
      * Returns the bibtex key, or null if it is not set.
      */
     public String getCiteKey() {
         return fields.get(KEY_FIELD);
     }
 
+    /**
+     * Validacao da bibtexkey
+     * - O primeiro caractere deve, obrigatoriamente, ser uma letra.
+     * - Definida pelo usuario ou automaticamente pelo sistema.
+    */
     public void setCiteKey(String newCiteKey) {
-        setField(KEY_FIELD, newCiteKey);
+        String auto;
+        String prefix = "bib";
+
+        char[] aux = newCiteKey.toCharArray();
+
+        auto = prefix.concat(AutoString());
+
+        if ((newCiteKey.length() < 2) || (Character.isDigit(aux[0]))) {
+            setField(KEY_FIELD, auto);
+        } else {
+            setField(KEY_FIELD, newCiteKey);
+        }
     }
+
 
     public boolean hasCiteKey() {
         return !Strings.isNullOrEmpty(getCiteKey());
@@ -325,6 +347,71 @@ public class BibEntry {
     public void setField(String name, String value) {
         Objects.requireNonNull(name, "field name must not be null");
         Objects.requireNonNull(value, "field value must not be null");
+          //Validacao do campo "year"
+        Calendar calendar = GregorianCalendar.getInstance();
+
+        int min = 1900;
+        int max = calendar.get(GregorianCalendar.YEAR);
+
+        if (name.equals("year")) {
+            int year = Integer.parseInt(value);
+
+            if (value.length() != 4) {
+                clearField("year");
+                return;
+            } else {
+                char[] digitos = value.toCharArray();
+
+                if (!Character.isDigit(digitos[0]) && !Character.isDigit(digitos
+
+[1]) && !Character.isDigit(digitos[2])
+                        && !Character.isDigit(digitos[3])) {
+                    clearField("year");
+                    return;
+                } else {
+                    if ((year < min) || (year > max)) {
+                        clearField("year");
+                        return;
+                    }
+                }
+            }
+        }
+
+        //Validacao do campo "number"
+        if (name.equals("number")) {
+            char[] number = value.toCharArray();
+
+            for (int i = 0; i < value.length(); i++) {
+                if (Character.isLetter(number[i])) {
+                    clearField("number");
+                    return;
+                }
+            }
+        }
+
+
+        //Valicao do campo  "edition"
+        if (name.equals("edition")) {
+            char[] edition = value.toCharArray();
+            int aux = 0;
+
+            for (int i = 0; i < (value.length() - 1); i++) {
+                if (Character.isDigit(edition[i])) {
+                    aux++;
+                }
+            }
+
+            if ((aux != (value.length() - 1)) || (aux == 0)) {
+                clearField("edition");
+                return;
+            } else
+             {
+                if (edition[value.length() - 1] != 'ª')
+                {
+                    clearField("edition");
+                    return;
+                }
+             }
 
         if (value.isEmpty()) {
             clearField(name);
@@ -351,6 +438,7 @@ public class BibEntry {
             // the change was rejected:
             fields.put(fieldName, oldValue);
             throw new IllegalArgumentException("Change rejected: " + pve);
+        }
         }
     }
 
