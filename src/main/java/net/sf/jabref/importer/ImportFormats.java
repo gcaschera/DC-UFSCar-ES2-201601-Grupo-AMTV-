@@ -87,7 +87,7 @@ public class ImportFormats {
             public ImportAction(JabRefFrame frame, boolean openInNew) {
                 this.frame = frame;
                 this.openInNew = openInNew;
-
+            // Acho que é tipo isso que a gente vai ter que mexer pra realizar a ultima manutenção. Utilizar método tipo esse pra criar a db nova caso existam objetos já existentes no arquivo importado
                 putValue(Action.NAME, openInNew ? Localization.menuTitle("Import into new database") : Localization
                         .menuTitle("Import into current database"));
                 putValue(Action.ACCELERATOR_KEY,
