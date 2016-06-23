@@ -304,8 +304,10 @@ public class BibEntry {
     }
 
     /**
-     * Validacao da bibtexkey
-     * - O primeiro caractere deve, obrigatoriamente, ser uma letra.
+     * Validacao de bibtexkey
+     * - O primeiro caractere deve, obrigatoriamente, ser uma letra e o campo
+     * - deve ter pelo menos dois caracteres. Caso contrario, sera usada
+     * - uma chave automatica.
      * - Definida pelo usuario ou automaticamente pelo sistema.
     */
     public void setCiteKey(String newCiteKey) {
@@ -347,7 +349,8 @@ public class BibEntry {
     public void setField(String name, String value) {
         Objects.requireNonNull(name, "field name must not be null");
         Objects.requireNonNull(value, "field value must not be null");
-          //Validacao do campo "year"
+
+        //Validacao do campo "year"
         Calendar calendar = GregorianCalendar.getInstance();
 
         int min = 1900;
@@ -375,70 +378,6 @@ public class BibEntry {
                     }
                 }
             }
-        }
-
-        //Validacao do campo "number"
-        if (name.equals("number")) {
-            char[] number = value.toCharArray();
-
-            for (int i = 0; i < value.length(); i++) {
-                if (Character.isLetter(number[i])) {
-                    clearField("number");
-                    return;
-                }
-            }
-        }
-
-
-        //Valicao do campo  "edition"
-        if (name.equals("edition")) {
-            char[] edition = value.toCharArray();
-            int aux = 0;
-
-            for (int i = 0; i < (value.length() - 1); i++) {
-                if (Character.isDigit(edition[i])) {
-                    aux++;
-                }
-            }
-
-            if ((aux != (value.length() - 1)) || (aux == 0)) {
-                clearField("edition");
-                return;
-            } else
-             {
-                if (edition[value.length() - 1] != 'ª')
-                {
-                    clearField("edition");
-                    return;
-                }
-             }
-
-        if (value.isEmpty()) {
-            clearField(name);
-            return;
-        }
-
-        String fieldName = toLowerCase(name);
-
-        if (BibEntry.ID_FIELD.equals(fieldName)) {
-            throw new IllegalArgumentException("The field name '" + name + "' is reserved");
-        }
-
-        changed = true;
-
-        String oldValue = fields.get(fieldName);
-        try {
-            // We set the field before throwing the changeEvent, to enable
-            // the change listener to access the new value if the change
-            // sets off a change in database sorting etc.
-            fields.put(fieldName, value);
-            firePropertyChangedEvent(fieldName, oldValue, value);
-        } catch (PropertyVetoException pve) {
-            // Since we have already made the change, we must undo it since
-            // the change was rejected:
-            fields.put(fieldName, oldValue);
-            throw new IllegalArgumentException("Change rejected: " + pve);
-        }
         }
     }
 
