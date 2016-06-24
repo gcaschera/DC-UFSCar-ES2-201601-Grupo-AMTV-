@@ -45,7 +45,7 @@ public class CsvImporterTest {
     //TESTE: importar arquivo com todos os campos obrigatórios preenchidos
     public void testImportCSVCopleto() throws IOException {
         importer = new CSVimporter();
-        try (InputStream is = CSVimporter.class.getResourceAsStream("CsvCompleto.csv")) {
+        try (InputStream is = CSVimporter.class.getResourceAsStream("CSVCompleto.csv")) {
             List<BibEntry> entries = importer.importEntries(is, new OutputPrinterToNull());
 
             BibEntry testEntry = entries.get(0);
@@ -65,7 +65,7 @@ public class CsvImporterTest {
 
             testEntry = entries.get(3);
             Assert.assertEquals("2007", testEntry.getField("year"));
-            Assert.assertEquals("J K Rownling", testEntry.getField("author"));
+            Assert.assertEquals("J K Rowling", testEntry.getField("author"));
             Assert.assertEquals("Harry Potter and the Deathly Hallows", testEntry.getField("title"));
 
         }
@@ -76,8 +76,7 @@ public class CsvImporterTest {
     //TESTE: importar arquivo com apenas ALGUNS dos campos obrigatórios preenchidos
     public void testImportCSVIncompleto() throws IOException {
         importer = new CSVimporter();
-        try (InputStream is = CSVimporter.class.getResourceAsStream("CsvIncompleto.csv")) {
-
+        try (InputStream is = CSVimporter.class.getResourceAsStream("CSVIncompleto.csv")) {
             List<BibEntry> entries = importer.importEntries(is, new OutputPrinterToNull());
 
             BibEntry testEntry = entries.get(0);
