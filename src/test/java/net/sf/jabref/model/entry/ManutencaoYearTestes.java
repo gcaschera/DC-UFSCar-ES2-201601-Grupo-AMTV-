@@ -155,4 +155,29 @@ public class ManutencaoYearTestes {
 
     }
 
+    //TESTE 5: Inserir ano dentro do domínio da entrada
+    @Test
+    public void testeYear05() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+        BibEntry input = new BibEntry("Livro X", "book");
+
+        input.setField("title", "Livro X");
+        input.setField("publisher", "UFSCar - Universidade Federal de São Carlos");
+        input.setField("year", "2010");
+        input.setField("author", "Dumblodore");
+        input.setField("editor", "Snape");
+        input.setCiteKey("X1");
+
+        writer.write(input, stringWriter, BibDatabaseMode.BIBTEX);
+        String string1 = stringWriter.toString();
+
+        String string2 = Globals.NEWLINE + "@Book{x1," + Globals.NEWLINE + "  title     = {Livro X}," + Globals.NEWLINE
+                + "  publisher = {UFSCar - Universidade Federal de São Carlos}," + Globals.NEWLINE
+                + "  year      = {2010}," + Globals.NEWLINE + "  author    = {Dumblodore}," + Globals.NEWLINE
+                + "  editor    = {Snape}," + Globals.NEWLINE + "}" + Globals.NEWLINE;
+
+        Assert.assertEquals(string2, string1);
+
+    }
+
 }
