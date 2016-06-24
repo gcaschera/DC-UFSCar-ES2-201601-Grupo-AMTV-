@@ -206,6 +206,8 @@ public class BibEntry {
             return getField(aliasForField);
         }
 
+
+
         // Finally, handle dates
         if ("date".equals(name)) {
             String year = getField("year");
@@ -332,6 +334,24 @@ public class BibEntry {
 
         if (BibEntry.ID_FIELD.equals(fieldName)) {
             throw new IllegalArgumentException("The field name '" + name + "' is reserved");
+        }
+
+        //Manutencao extra: Campo Title deve iniciar com letra maiuscula
+        if (name.equals("title")) {
+            String aux = value.substring(0, 1);
+            if (aux.equals(aux.toLowerCase())) {
+                clearField("title");
+                return;
+            }
+        }
+
+        //Manutencao extra: Campo Author deve iniciar com letra maiuscula
+        if (name.equals("author")) {
+            String aux = value.substring(0, 1);
+            if (aux.equals(aux.toLowerCase())) {
+                clearField("author");
+                return;
+            }
         }
 
         //Manutencao: Validacao do campo ano ("year")
@@ -509,7 +529,7 @@ public class BibEntry {
     /**
      * @param maxCharacters The maximum number of characters (additional
      *                      characters are replaced with "..."). Set to 0 to disable truncation.
-     * @return A short textual description of the entry in the format:
+     * @return A short textual deion of the entry in the format:
      * Author1, Author2: Title (Year)
      */
     public String getAuthorTitleYear(int maxCharacters) {
