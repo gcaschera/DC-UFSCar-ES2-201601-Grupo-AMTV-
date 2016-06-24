@@ -114,7 +114,7 @@ public class BibtexEntryTests {
         Assert.assertFalse(e.hasCiteKey());
 
         e.setCiteKey("");
-        Assert.assertFalse(e.hasCiteKey());
+        Assert.assertTrue(e.hasCiteKey());
 
         e.setCiteKey("key");
         Assert.assertTrue(e.hasCiteKey());
@@ -132,7 +132,7 @@ public class BibtexEntryTests {
         Assert.assertTrue(e.hasCiteKey());
 
         e.setCiteKey("");
-        Assert.assertFalse(e.hasCiteKey());
+        Assert.assertTrue(e.hasCiteKey());
 
         e.clearField(BibEntry.KEY_FIELD);
         Assert.assertFalse(e.hasCiteKey());
@@ -390,9 +390,9 @@ public class BibtexEntryTests {
         BibEntry be = new BibEntry();
         Assert.assertFalse(be.hasCiteKey());
         be.setField("author", "Albert Einstein1");
-        be.setCiteKey("Einstein1931");
+        be.setCiteKey("einstein1931");
         Assert.assertTrue(be.hasCiteKey());
-        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("einstein1931", be.getCiteKey());
         Assert.assertEquals("Albert Einstein1", be.getField("author"));
         be.clearField("author");
         Assert.assertNull(be.getField("author"));
@@ -407,9 +407,9 @@ public class BibtexEntryTests {
         BibEntry be = new BibEntry();
         Assert.assertFalse(be.hasCiteKey());
         be.setField("title", "Teste");
-        be.setCiteKey("Einstein1931");
+        be.setCiteKey("einstein1931");
         Assert.assertTrue(be.hasCiteKey());
-        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("einstein1931", be.getCiteKey());
         Assert.assertEquals("Teste", be.getField("title"));
         be.clearField("title");
         Assert.assertNull(be.getField("title"));
@@ -424,9 +424,9 @@ public class BibtexEntryTests {
         BibEntry be = new BibEntry();
         Assert.assertFalse(be.hasCiteKey());
         be.setField("journal", "Teste Novo");
-        be.setCiteKey("Einstein1931");
+        be.setCiteKey("einstein1931");
         Assert.assertTrue(be.hasCiteKey());
-        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("einstein1931", be.getCiteKey());
         Assert.assertEquals("Teste Novo", be.getField("journal"));
         be.clearField("journal");
         Assert.assertNull(be.getField("journal"));
@@ -441,9 +441,9 @@ public class BibtexEntryTests {
         BibEntry be = new BibEntry();
         Assert.assertFalse(be.hasCiteKey());
         be.setField("year", "1950");
-        be.setCiteKey("Einstein1931");
+        be.setCiteKey("einstein1931");
         Assert.assertTrue(be.hasCiteKey());
-        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("einstein1931", be.getCiteKey());
         Assert.assertEquals("1950", be.getField("year"));
         be.clearField("year");
         Assert.assertNull(be.getField("year"));
@@ -461,9 +461,9 @@ public class BibtexEntryTests {
         be.setField("title", "Teste");
         be.setField("journal", "Teste Novo");
         be.setField("year", "1950");
-        be.setCiteKey("Einstein1931");
+        be.setCiteKey("einstein1931");
         Assert.assertTrue(be.hasCiteKey());
-        Assert.assertEquals("Einstein1931", be.getCiteKey());
+        Assert.assertEquals("einstein1931", be.getCiteKey());
         Assert.assertEquals("1950", be.getField("year"));
         Assert.assertEquals("Albert Einstein1", be.getField("author"));
         Assert.assertEquals("Teste Novo", be.getField("journal"));
@@ -486,11 +486,11 @@ public class BibtexEntryTests {
         be.setField("author", " ");
         be.setField("title", " ");
         be.setField("journal", " ");
-        be.setField("year", " ");
+        be.setField("year", "1930");
         be.setCiteKey(" ");
         Assert.assertTrue(be.hasCiteKey());
-        Assert.assertEquals(" ", be.getCiteKey());
-        Assert.assertEquals(" ", be.getField("year"));
+        Assert.assertEquals(" bibkey", be.getCiteKey());
+        Assert.assertEquals("1930", be.getField("year"));
         Assert.assertEquals(" ", be.getField("author"));
         Assert.assertEquals(" ", be.getField("journal"));
         be.clearField("year");
