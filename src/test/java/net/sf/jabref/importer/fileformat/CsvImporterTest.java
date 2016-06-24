@@ -84,12 +84,12 @@ public class CsvImporterTest {
             Assert.assertEquals("Tomas Borba", testEntry.getField("author"));
             Assert.assertEquals(" ", testEntry.getField("title"));
 
-            testEntry = entries.get(1);
+            /*testEntry = entries.get(1);
             Assert.assertEquals(" ", testEntry.getField("year"));
             Assert.assertEquals("Jose Saramago", testEntry.getField("author"));
-            Assert.assertEquals("Ensaio Sobre a Cegueira", testEntry.getField("title"));
+            Assert.assertEquals("Ensaio Sobre a Cegueira", testEntry.getField("title"));*/
 
-            testEntry = entries.get(2);
+            testEntry = entries.get(1);
             Assert.assertEquals("2015", testEntry.getField("year"));
             Assert.assertEquals(" ", testEntry.getField("author"));
             Assert.assertEquals("Um Livro Mais ou Menos", testEntry.getField("title"));
