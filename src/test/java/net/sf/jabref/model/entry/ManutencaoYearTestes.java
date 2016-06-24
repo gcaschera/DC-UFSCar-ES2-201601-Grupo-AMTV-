@@ -2,6 +2,8 @@ package net.sf.jabref.model.entry;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.GregorianCalendar;
+import java.util.Calendar;
 import net.sf.jabref.Globals;
 import net.sf.jabref.JabRefPreferences;
 import net.sf.jabref.bibtex.BibEntryWriter;
@@ -73,6 +75,68 @@ public class ManutencaoYearTestes {
         input.setField("title", "Livro X");
         input.setField("publisher", "UFSCar - Universidade Federal de São Carlos");
         input.setField("year", "1801");
+        input.setField("author", "Dumblodore");
+        input.setField("editor", "Snape");
+        input.setCiteKey("X1");
+
+        writer.write(input, stringWriter, BibDatabaseMode.BIBTEX);
+        String string1 = stringWriter.toString();
+
+        String string2 = Globals.NEWLINE + "@Book{x1," + Globals.NEWLINE + "  title     = {Livro X}," + Globals.NEWLINE
+                + "  publisher = {UFSCar - Universidade Federal de São Carlos}," + Globals.NEWLINE
+                + "  author    = {Dumblodore}," + Globals.NEWLINE + "  editor    = {Snape}," + Globals.NEWLINE + "}"
+                + Globals.NEWLINE;
+
+        Assert.assertEquals(string2, string1);
+
+        Assert.assertNull(input.getField("year"));
+
+    }
+
+    //TESTE 3: Inserir ano igual ao ano máximo (atual).
+    @Test
+    public void testeYear03() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+        Calendar calendar = GregorianCalendar.getInstance();
+        BibEntry input = new BibEntry("Livro X", "book");
+
+        int anoAtual = calendar.get(GregorianCalendar.YEAR);
+
+        String anoAtualString = Integer.toString(anoAtual);
+
+        input.setField("title", "Livro X");
+        input.setField("publisher", "UFSCar - Universidade Federal de São Carlos");
+        input.setField("year", anoAtualString);
+        input.setField("author", "Dumblodore");
+        input.setField("editor", "Snape");
+        input.setCiteKey("X1");
+
+        writer.write(input, stringWriter, BibDatabaseMode.BIBTEX);
+        String string1 = stringWriter.toString();
+
+        String string2 = Globals.NEWLINE + "@Book{x1," + Globals.NEWLINE + "  title     = {Livro X}," + Globals.NEWLINE
+                + "  publisher = {UFSCar - Universidade Federal de São Carlos}," + Globals.NEWLINE + "  year      = {"
+                + anoAtualString + "}," + Globals.NEWLINE + "  author    = {Dumblodore}," + Globals.NEWLINE
+                + "  editor    = {Snape}," + Globals.NEWLINE + "}" + Globals.NEWLINE;
+
+        Assert.assertEquals(string2, string1);
+
+    }
+
+    //TESTE 4: Inserir maior que ano máximo (atual).
+    @Test
+    public void testeYear04() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+        Calendar calendar = GregorianCalendar.getInstance();
+        BibEntry input = new BibEntry("Livro X", "book");
+
+        int anoSuperior = calendar.get(GregorianCalendar.YEAR) + 1;
+
+        String anoSuperiorString = Integer.toString(anoSuperior);
+
+        input.setField("title", "Livro X");
+        input.setField("publisher", "UFSCar - Universidade Federal de São Carlos");
+        input.setField("year", anoSuperiorString);
         input.setField("author", "Dumblodore");
         input.setField("editor", "Snape");
         input.setCiteKey("X1");
