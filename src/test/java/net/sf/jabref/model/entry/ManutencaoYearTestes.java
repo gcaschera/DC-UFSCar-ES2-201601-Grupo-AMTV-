@@ -37,9 +37,36 @@ public class ManutencaoYearTestes {
         writer = new BibEntryWriter(new LatexFieldFormatter(), true);
     }
 
-    //TESTE 1:
+    //TESTE 1: Inserir ano igual ao ano mínimo.
     @Test
     public void testeYear01() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+        BibEntry input = new BibEntry("Livro X", "book");
+
+        input.setField("title", "Livro X");
+        input.setField("publisher", "UFSCar - Universidade Federal de São Carlos");
+        input.setField("year", "1900");
+        input.setField("author", "Dumblodore");
+        input.setField("editor", "Snape");
+        input.setCiteKey("X1");
+
+        writer.write(input, stringWriter, BibDatabaseMode.BIBTEX);
+        String string1 = stringWriter.toString();
+
+        String string2 = Globals.NEWLINE + "@Book{x1," + Globals.NEWLINE + "  title     = {Livro X}," + Globals.NEWLINE
+                + "  publisher = {UFSCar - Universidade Federal de São Carlos}," + Globals.NEWLINE
+                + "  year      = {1900}," + Globals.NEWLINE
+                + "  author    = {Dumblodore}," + Globals.NEWLINE + "  editor    = {Snape}," + Globals.NEWLINE + "}"
+                + Globals.NEWLINE;
+
+        Assert.assertEquals(string2, string1);
+
+
+    }
+
+    //TESTE 2: Inserir ano abaixo do ano mínimo.
+    @Test
+    public void testeYear02() throws IOException {
         StringWriter stringWriter = new StringWriter();
         BibEntry input = new BibEntry("Livro X", "book");
 
