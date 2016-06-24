@@ -26,6 +26,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -85,8 +87,14 @@ import net.sf.jabref.gui.undo.UndoableInsertEntry;
 import net.sf.jabref.gui.undo.UndoableRemoveEntry;
 import net.sf.jabref.gui.util.comparator.IconComparator;
 import net.sf.jabref.gui.util.component.CheckBoxMessage;
+import net.sf.jabref.gui.actions.*;
+import net.sf.jabref.gui.JabRefFrame;
+
 import net.sf.jabref.importer.ImportInspector;
+import net.sf.jabref.importer.OpenDatabaseAction;
 import net.sf.jabref.importer.OutputPrinter;
+import net.sf.jabref.importer.ParserResult;
+import net.sf.jabref.importer.fileformat.BibtexParser;
 import net.sf.jabref.logic.bibtex.comparator.FieldComparator;
 import net.sf.jabref.logic.groups.AllEntriesGroup;
 import net.sf.jabref.logic.groups.EntriesGroupChange;
@@ -184,7 +192,8 @@ public class ImportInspectionDialog extends JDialog implements ImportInspector, 
     private static final int URL_COL = 3;
     private static final int PAD = 4;
     private static final String URL_FIELD = "url";
-
+    
+    private final Charset defaultEncoding = StandardCharsets.UTF_8;
 
     /**
      * Creates a dialog that displays the given list of fields in the table. The
@@ -648,23 +657,17 @@ public class ImportInspectionDialog extends JDialog implements ImportInspector, 
                             int answer2 = JOptionPane.showConfirmDialog(ImportInspectionDialog.this, novoDB,
                                     Localization.lang("Duplicates found"), JOptionPane.YES_NO_OPTION);
                             
-                            //Se apertar nao vai voltar e nao fazer nada
+                            //Se apertar "nao" vai voltar e nao fazer nada
                             if (answer2 == JOptionPane.NO_OPTION) {
-                            	
-                            	
+
                             	return;
                             }
-                            //Aqui a gente tem que definir como ele vai importar pra nova database
+                            //PARTE PARA DEFINIR COMO IMPORTAR OS DADOS EM UMA NOVA DATABASE
+                            final List<BibEntry> selected = getSelectedEntries();
+                        
+                            NewDatabaseAction ndb = new NewDatabaseAction(frame, BibDatabaseMode.BIBTEX);;
                             
-                            
-                            
-                            
-                            
-                            
-                            
-                            //esse return tem que permanecer para que ele nao execute o resto do código que tecnicamente
-                            //ira importar as entradas para mesma database
-                            return;
+                            return;  
                         }
                         break;
                     }
