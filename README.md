@@ -31,7 +31,7 @@
       Arquivo: src/main/java/net/sf/jabref/importer/fileformat/CSVimporter.java
       
     - Em importação de itens bibliográficos, oferecer a opção de criação de um novo arquivo (database) quando existirem entradas duplicadas no arquivo corrente (current database) e o arquivo que está sendo importado (considerar formatos BibTeX e CSV).
-      Arquivo: 
+      Arquivo: src/main/java/net/sf/jabref/gui/ImportInspectionDialog.java
       
   > **Testes das manutenções:**
   
